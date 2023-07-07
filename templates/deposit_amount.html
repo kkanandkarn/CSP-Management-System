@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit Amount</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"] {
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 16px;
+    }
+    
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .otp-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    
+    .otp-section {
+      display: none;
+    }
+    
+    input[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Additional styles for the submit button */
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    input[type="submit"]:focus {
+      outline: none;
+    }
+    .dashboard-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #333;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script>
+    function showOTPSection(event) {
+      event.preventDefault();
+      var accountNumber = document.getElementById('accountNumber').value;
+      var ifscCode = document.getElementById('ifscCode').value;
+      var accountHolderName = document.getElementById('accountHolderName').value;
+      var amountInput = document.getElementById('amount').value;
+      
+      if (accountNumber === "") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Account number is required',
+        });
+      } else if (ifscCode === "") {
+        Swal.fire({
+          icon: 'error',
+          title: 'IFSC code is required',
+        });
+      } else if (accountHolderName === "") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Account holder\'s name is required',
+        });
+      } else if (amountInput === "") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Please enter an amount',
+        });
+      } else {
+        document.getElementById('otpSection').style.display = 'block';
+      }
+    }
+    
+    function submitForm(event) {
+        event.preventDefault();
+  var otpInput = document.getElementById('otp').value;
+  var amountInput = document.getElementById('amount').value;
+  if (otpInput === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Captcha is required',
+    });
+  } 
+  else if (amountInput === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Amount is required',
+    });
+  }
+  
+  else {
+    // Send the form details along with OTP to the Flask file
+    // Replace the URL and method with the appropriate Flask endpoint
+    var form = document.getElementById('depositForm');
+    form.action = '/submit-deposit';  // Replace with the Flask endpoint
+    form.method = 'POST';
+
+    // Add an additional field to the form data for OTP
+    var formData = new FormData(form);
+    formData.append('otp', otpInput);
+
+    // Send the form data to the server using Fetch API
+    fetch(form.action, {
+      method: form.method,
+      body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+      // Check the result from the server
+      if (result === 'success') {
+        // Display success alert and redirect to  page
+        Swal.fire({
+          icon: 'success',
+          title: 'Amount deposit successfully!',
+        }).then(() => {
+          window.location.href = '/dashboard';  // Replace with the dashboard page URL
+        });
+      } else if (result === 'Account doesnt exist'){
+        Swal.fire({
+          icon: 'error',
+          title: 'Account not found',
+        });
+      } 
+      else {
+        // Display error alert for invalid OTP
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Captcha. Please try again.',
+        });
+      }
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error('Error:', error);
+    });
+  }
+}
+function redirectToDashboard() {
+    window.location.href = '/dashboard';
+  }
+
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard-icon" onclick="redirectToDashboard()">
+      <span class="glyphicon glyphicon-th-large"></span>
+    </div>
+  <div class="container">
+    <h1>Deposit Amount</h1>
+    
+    <form id="depositForm">
+      <div class="form-group">
+        <label for="accountNumber">Enter Account Number:</label>
+        <input type="text" id="accountNumber" name="accountNumber">
+      </div>
+      
+      <div class="form-group">
+        <label for="ifscCode">Enter IFSC Code:</label>
+        <input type="text" id="ifscCode" name="ifscCode">
+      </div>
+      
+      <div class="form-group">
+        <label for="accountHolderName">Enter Account Holder's Name:</label>
+        <input type="text" id="accountHolderName" name="accountHolderName">
+      </div>
+      
+      <div class="form-group">
+        <label for="amount">Enter Amount:</label>
+        <input type="text" id="amount" name="amount">
+      </div>
+      
+      <button class='otp-button' onclick="showOTPSection(event)">Process</button>
+      
+      <div id="otpSection" class="otp-section">
+        <div class="form-group">
+          <label for="otp">Fill Captcha</label>
+          <input type="text" id="otp" name="otp" placeholder="Type 'confirm'">
+        </div>
+        
+        <input type="submit" value="Submit" onclick="submitForm(event)">
+      </div>
+    </form>
+  </div>
+</body>
+</html>

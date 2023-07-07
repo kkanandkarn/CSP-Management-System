@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Transfer Details</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .form-container {
+      width: 80%;
+      max-width: 1000px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    
+    .form-container h2 {
+      margin-bottom: 20px;
+    }
+    
+    .form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .form-row .input-container {
+      flex: 1;
+    }
+    
+    .form-row .input-container label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .form-row .input-container input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    
+    .form-row .input-container input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    
+    .otp-button {
+      display: block;
+      width: 120px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .otp-section {
+      display: none;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .otp-section h2 {
+      margin-bottom: 10px;
+    }
+    
+    .otp-section input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    
+    .submit-button {
+      display: none;
+      width: 120px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #28a745;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .dashboard-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #333;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard-icon" onclick="redirectToDashboard()">
+      <span class="glyphicon glyphicon-th-large"></span>
+    </div>
+    <div class="form-container">
+      <h2>Transfer Amount</h2>
+      <div class="form-column">
+        <div class="form-row">
+          <div class="input-container">
+            <label for="senderAccountNumber">Sender Account Number:</label>
+            <input type="text" id="senderAccountNumber" name="senderAccountNumber">
+          </div>
+
+          <div class="input-container">
+            <label for="receiverAccountNumber">Receiver Account Number:</label>
+            <input type="text" id="receiverAccountNumber" name="receiverAccountNumber">
+          </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="input-container">
+                <label for="senderIFSCCode">Sender IFSC Code:</label>
+                <input type="text" id="senderIFSCCode" name="senderIFSCCode">
+              </div>
+              <div class="input-container">
+                <label for="receiverIFSCCode">Receiver IFSC Code:</label>
+                <input type="text" id="receiverIFSCCode" name="receiverIFSCCode">
+              </div>
+          
+          
+
+        </div>
+
+
+        <div class="form-row">
+            <div class="input-container">
+                <label for="senderName">Sender Name:</label>
+                <input type="text" id="senderName" name="senderName">
+              </div>
+         
+          <div class="input-container">
+            <label for="receiverName">Receiver Name:</label>
+            <input type="text" id="receiverName" name="receiverName">
+          </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="input-container">
+                <label for="senderName">Enter Amount</label>
+                <input type="text" id="amount" name="amount" required>
+              </div>
+         
+          <div class="input-container">
+            <button class="otp-button" onclick="requestOTP()">Request OTP</button>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="otpSection" class="otp-section">
+        <h2>Enter OTP</h2>
+        <input type="text" id="otp" name="otp">
+      </div>
+      <input class="submit-button" type="submit" value="Submit" id="submitButton">
+    </div>
+  </div>
+  
+  <script>
+function requestOTP() {
+  var senderAccountNumber = document.getElementById("senderAccountNumber").value;
+  var receiverAccountNumber = document.getElementById("receiverAccountNumber").value;
+  var senderIFSCCode = document.getElementById("senderIFSCCode").value;
+  var receiverIFSCCode = document.getElementById("receiverIFSCCode").value;
+  var senderName = document.getElementById("senderName").value;
+  var receiverName = document.getElementById("receiverName").value;
+  var amount = document.getElementById("amount").value;
+
+  if (senderAccountNumber === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sender Account Number is required.',
+    });
+    return;
+  }
+
+  if (receiverAccountNumber === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Receiver Account Number is required.',
+    });
+    return;
+  }
+
+  if (senderIFSCCode === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sender IFSC Code is required.',
+    });
+    return;
+  }
+
+  if (receiverIFSCCode === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Receiver IFSC Code is required.',
+    });
+    return;
+  }
+
+  if (senderName === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sender Name is required.',
+    });
+    return;
+  }
+
+  if (receiverName === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Receiver Name is required.',
+    });
+    return;
+  }
+  if (amount === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Amount is required.',
+    });
+    return;
+  }
+
+  document.getElementById("otpSection").style.display = "block";
+  document.getElementById("submitButton").style.display = "block";
+}
+
+document.getElementById("submitButton").addEventListener("click", function(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  var senderAccountNumber = document.getElementById("senderAccountNumber").value;
+  var receiverAccountNumber = document.getElementById("receiverAccountNumber").value;
+  var senderIFSCCode = document.getElementById("senderIFSCCode").value;
+  var receiverIFSCCode = document.getElementById("receiverIFSCCode").value;
+  var senderName = document.getElementById("senderName").value;
+  var receiverName = document.getElementById("receiverName").value;
+  var otp = document.getElementById("otp").value;
+  var amount = document.getElementById("amount").value;
+
+
+  if (amount === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Amount is required.',
+      text: 'Please enter the amount.'
+    });
+    return; // Stop further execution
+  }
+
+
+  // Create a data object to send in the request body
+  var data = {
+    senderAccountNumber: senderAccountNumber,
+    receiverAccountNumber: receiverAccountNumber,
+    senderIFSCCode: senderIFSCCode,
+    receiverIFSCCode: receiverIFSCCode,
+    senderName: senderName,
+    receiverName: receiverName,
+    otp: otp,
+    amount: amount
+  };
+
+  // Send an HTTP POST request to your Flask server
+  fetch("/submit-transfer", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+})
+  .then(function(response) {
+    // Handle the response from the server
+    if (response.ok) {
+      // Show a success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Money Transfer Successfull',
+        text: 'Check balance for confirmation.'
+
+      }).then(function() {
+        window.location.href = "/dashboard"; // Redirect to the dashboard
+      });
+    } else {
+      console.log(data.error)
+      // Handle specific error cases
+      if (response.status === 400) {
+        response.json().then(function(data) {
+          // Check for sender and receiver errors
+          if (data.error === "Sender does not exist.") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sender not found.',
+              text: 'The sender account does not exist.'
+            });
+          } else if (data.error === "Receiver does not exist.") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Receiver not found.',
+              text: 'The receiver account does not exist.'
+            });
+          }
+          else if (data.error === "Insufficient balance.") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Insufficient balance.',
+                text: 'The sender does not have enough balance to perform the transfer.'
+              });
+            }
+          
+          else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Form submission failed.',
+              text: 'Please try again.'
+            });
+          }
+        });
+      } else if (response.status === 401) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid OTP.',
+          text: 'Please enter a valid OTP.'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Form submission failed.',
+          text: 'Please try again.'
+        });
+      }
+    }
+  })
+  .catch(function(error) {
+    // Show an error message
+    Swal.fire({
+      icon: 'error',
+      title: 'Form submission failed.',
+      text: 'Please try again.'
+    });
+    console.error(error);
+});
+
+
+});
+
+
+function redirectToDashboard() {
+    window.location.href = '/dashboard';
+  }
+
+
+  </script>
+</body>
+</html>

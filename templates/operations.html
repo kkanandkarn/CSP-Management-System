@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Operations</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-row {
+      display: flex;
+      margin-bottom: 150px;
+    }
+
+    .button {
+      margin: 5px;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Increase the distance between buttons */
+    .button + .button {
+      margin-left: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <div class="button-row">
+      <button class="button" onclick="redirectToAccountOpening()">Account Opening</button>
+      <button class="button" onclick="redirectToDepositAmount()"">Deposit Amount</button>
+      <button class="button">Cash Withdrawal</button>
+    </div>
+    <div class="button-row">
+      <button class="button">Check Bank Balance</button>
+      <button class="button">Loan Application</button>
+      <button class="button">KYC Verification</button>
+    </div>
+  </div>
+
+  <script>
+    function redirectToAccountOpening() {
+      window.location.href = "/accountopening";
+    }
+    function redirectToDepositAmount() {
+      window.location.href = "/depositamount";
+    }
+    
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KYC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    input[type="file"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 180px;
+    }
+    .profile-pic {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .profile-pic img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
+    .dashboard-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #333;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+  
+  <div class="container">
+    <h1>KYC</h1> 
+    <h4 style="color: red;">OTP sent to mobile number</h4>
+    <form id="kycForm">
+        <div class="form-group">
+            <label for="profile-pic">Upload Picture (filetype .png, .jpg, .jpeg):</label>
+            <input type="file" id="profile-pic" name="profile-pic" onchange="displayProfilePic(event)" accept=".png, .jpg, .jpeg">
+          </div>
+        
+          <div class="profile-pic" id="display-profile-pic">
+            <!-- Profile picture will be displayed here -->
+          </div>
+
+      <div class="form-group">
+        <label for="document1">Upload Aadhar Card (filetype .pdf):</label>
+        <input type="file" id="document1" name="document1" accept=".pdf">
+      </div>
+    
+      <div class="form-group">
+        <label for="document2">Upload PAN Card (filetype .pdf):</label>
+        <input type="file" id="document2" name="document2">
+      </div>
+    
+      <div class="form-group">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp">
+      </div>
+    
+      <div>
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+  
+  <script>
+    function displayProfilePic(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function() {
+        var profilePicElement = document.createElement('img');
+        profilePicElement.src = reader.result;
+        profilePicElement.alt = "Profile Picture";
+        document.getElementById('display-profile-pic').innerHTML = '';
+        document.getElementById('display-profile-pic').appendChild(profilePicElement);
+      }
+      reader.readAsDataURL(file);
+    }
+ 
+    document.querySelector('#kycForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+    var profilePic = document.getElementById('profile-pic').value;
+    var document1 = document.getElementById('document1').value;
+    var document2 = document.getElementById('document2').value;
+    var otp = document.getElementById('otp').value;
+
+    var allowedProfilePicTypes = ['.png', '.jpg', '.jpeg'];
+    var allowedDocumentTypes = ['.pdf'];
+
+    var profilePicType = profilePic.substring(profilePic.lastIndexOf('.'));
+    var document1Type = document1.substring(document1.lastIndexOf('.'));
+    var document2Type = document2.substring(document2.lastIndexOf('.'));
+
+    if (
+      !profilePic || !document1 || !document2 || !otp ||
+      !allowedProfilePicTypes.includes(profilePicType.toLowerCase()) ||
+      !allowedDocumentTypes.includes(document1Type.toLowerCase()) ||
+      !allowedDocumentTypes.includes(document2Type.toLowerCase())
+    ) {
+      event.preventDefault(); // Prevent form submission
+
+      var errorMessage = "Please make sure to:\n\n";
+      if (!profilePic || !allowedProfilePicTypes.includes(profilePicType.toLowerCase())) {
+        errorMessage += "- Upload a profile picture in PNG, JPG, or JPEG format.\n";
+      }
+      if (!document1 || !allowedDocumentTypes.includes(document1Type.toLowerCase())) {
+        errorMessage += "- Upload Document 1 in PDF format.\n";
+      }
+      if (!document2 || !allowedDocumentTypes.includes(document2Type.toLowerCase())) {
+        errorMessage += "- Upload Document 2 in PDF format.\n";
+      }
+      if (!otp) {
+        errorMessage += "- Enter the OTP.";
+      }
+
+      alert(errorMessage);
+    } 
+
+    else {
+    // Send the OTP to Flask for validation
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/validate-otp', true); 
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    var data = {
+      otp: otp // Assuming 'otp' is the name of the OTP input field
+    };
+
+    xhr.onreadystatechange = function() {
+  if (xhr.readyState === XMLHttpRequest.DONE) {
+    if (xhr.status === 200) {
+      // Successful response from the server
+      var response = xhr.responseText; // Retrieve the response
+      if (response === 'Account created Successfully') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Account created successfully!',
+        }).then(() => {
+          window.location.href = '/dashboard';  // Replace with the dashboard page URL
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid OTP. Please try again.',
+        }); // Display error message if OTP is invalid
+      }
+    } else {
+      // Error response from the server
+      alert('An error occurred while sending the OTP to the server.');
+    }
+  }
+};
+
+
+    xhr.send(JSON.stringify(data));
+
+    event.preventDefault(); // Prevent form submission (you may remove this line if you want the form to submit after sending the OTP)
+  }
+
+
+  });
+  </script>
+</body>
+</html>

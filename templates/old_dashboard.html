@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .module {
+            cursor: pointer;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .module:hover {
+            background-color: #f5f5f5;
+        }
+
+        .logout {
+            margin-top: auto;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* CSS Styles for Heading1 */
+        .heading1 {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            /* Shadow effect */
+            text-align: left;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Additional Styles for Content Section */
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            margin-left: 320px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .section-content {
+            line-height: 1.5;
+        }
+
+        .link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .user-icon {
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-name {
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .user-icon img {
+            width: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="user-info">
+            <div class="user-icon">
+                <img src="static/user.png" alt="User Icon">
+            </div>
+            <div class="user-name">
+                {{ username }}
+            </div>
+        </div>
+        <div class="module" onclick="redirectToAccountOpening()">
+            <i class="fas fa-folder-open"></i>  Accounts Opening
+        </div>
+        <div class="module" onclick="redirectToDepositAmount()">
+            <i class="fas fa-money-bill-wave"></i>  Deposit Amount
+        </div>
+        <div class="module" onclick="redirectTowithdrawAmount()">
+            <i class="fas fa-money-bill"></i>  withdraw Amount
+        </div>
+        <div class="module" onclick="redirectTobalance()">
+            <i class="fas fa-balance-scale"></i>   Check Bank balance
+        </div>
+        <div class="module" onclick="redirectTomoneytransfer()">
+            <i class="fas fa-exchange-alt"></i>  Money Transfer
+        </div>
+        <div class="module" onclick="redirectTostatement()">
+            <i class="fas fa-receipt"></i>  Mini Statement
+        </div>
+
+
+        <div class="logout" onclick="logout()">
+             <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="heading1">
+            <span class="glyphicon glyphicon-menu-hamburger"></span> CSP Management System Agent Login
+        </div>
+        <br><br>
+        <div class="desc">
+            <div class="section-title">How it works ?</div>
+            <div class="section-content">
+                <!-- Add content here -->
+                In this project, the CSP Management System, the agent can login to the portal by entering correct
+                username and password. Agent can open account of any customer by entering customer’s personal
+                details, opening balance, document details for verification. Agent can login customer’s account by
+                account number and OTP for view user bank details, deposit amount, withdraw amount, view
+                transaction, and e-kyc verification. The agent must submit mobile and OTP in order to gain access
+                to customer’s account
+            </div>
+            <br>
+
+            <div class="section-title">Account Opening</div>
+            <div class="section-content">
+                <!-- Add information about how the bank works -->
+                The system allows an agent to open a bank account for a new customer. The agent fills out a registration
+                form with the required details, verifies the entered information, and can make edits if needed. The form
+                undergoes verification and validation processes, checking for completeness and valid data. If any errors
+                are
+                found, appropriate error messages are displayed. Once the verification and validation are completed, the
+                agent verifies the customer's mobile number linked to their Aadhaar number through OTP verification.
+                After
+                successful verification, the data is saved in the database, and a pop-up message confirms the successful
+                creation of the account.
+            </div>
+            <br>
+
+            <div class="section-title">Deposit Amount</div>
+            <div class="section-content">
+                <!-- Add the bank's privacy policy -->
+                To deposit money into a customer's account, the agent enters the account number and linked mobile number
+                to
+                gain access. The program verifies the information and sends an OTP for authentication. If the OTP is
+                correct, the agent can access the account and deposit the desired amount. The transaction is recorded as
+                a
+                transaction history, and the customer's account balance is updated in the database.
+            </div>
+            <br>
+
+            <div class="section-title">withdraw Amount</div>
+            <div class="section-content">
+                <!-- Add content here -->
+                The agent can access a customer's account by entering the account number and linked mobile number. A
+                correct OTP allows access, while a wrong OTP restricts it. The agent can withdraw money from the
+                customer's account after verifying an OTP sent to the customer. The transaction is recorded in the
+                database, updating the account balance.
+            </div>
+            <br>
+
+            <div class="section-title">Check Bank Balance</div>
+            <div class="section-content">
+                <!-- Add information about how the bank works -->
+                The agent gains access to the customer's account by entering the account number and linked mobile
+                number, followed by verifying an OTP. With the correct OTP, the agent can view the customer's bank
+                balance, while an incorrect OTP restricts access.
+            </div>
+            <br>
+
+            <div class="section-title">Money Transfer</div>
+            <div class="section-content">
+                <!-- Add the bank's privacy policy -->
+                The agent can transfer money from the customer's account by gaining access through the account number
+                and linked mobile number. After verifying the OTP, the agent can enter the receiver's account number and
+                IFSC code to complete the transfer. The transaction is recorded in the database, updating the account
+                balance.
+            </div>
+            <br>
+            <div class="section-title">Mini Statement</div>
+            <div class="section-content">
+                <!-- Add the bank's privacy policy -->
+                The agent is able to retrieve the bank statement of an account holder by inputting the accurate account
+                number and IFSC code. To access the mini statement of the account holder, the agent is required to
+                authenticate the One-Time Password (OTP) as a validation measure. This ensures the security and privacy
+                of the account holder's financial information.
+            </div>
+            <br>
+        </div>
+    </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+        function logout() {
+            // Handle logout functionality here
+            window.location.href = '/';
+        }
+        function redirectToAccountOpening() {
+            window.location.href = '/accountopening';
+        }
+        function redirectToDepositAmount() {
+            window.location.href = '/depositamount';
+        }
+        function redirectTowithdrawAmount() {
+            window.location.href = '/withdrawamount';
+        }
+        function redirectTobalance() {
+            window.location.href = '/checkbalance';
+        }
+
+        function redirectTomoneytransfer() {
+            window.location.href = '/moneytransfer';
+        }
+        function redirectTostatement() {
+            window.location.href = '/ministatement';
+        }
+    </script>
+</body>
+
+</html>

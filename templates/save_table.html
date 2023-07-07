@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Save Table Data as PDF</title>
+  <script src="E:/CSP PROJECT/static/jspdf.min.js"></script>
+</head>
+<body>
+
+    <table id="myTable">
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+        </tr>
+        <tr>
+          <td>Value 1</td>
+          <td>Value 2</td>
+          <td>Value 3</td>
+        </tr>
+        <tr>
+          <td>Value 4</td>
+          <td>Value 5</td>
+          <td>Value 6</td>
+        </tr>
+      </table>
+  <!-- Your table code here -->
+  <!-- Save button -->
+  <button onclick="saveTableAsPDF()">Save Table as PDF</button>
+
+  <script>
+    function saveTableAsPDF() {
+      var table = document.getElementById("myTable");
+      var rows = table.getElementsByTagName("tr");
+      
+      // Create a new jsPDF instance
+      var doc = new jsPDF();
+
+      // Positioning variables
+      var startX = 10;
+      var startY = 10;
+      var rowHeight = 10;
+      var cellPadding = 5;
+
+      // Generate PDF content
+      for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].getElementsByTagName("td");
+        var rowData = [];
+
+        for (var j = 0; j < cells.length; j++) {
+          rowData.push(cells[j].innerText);
+        }
+
+        var text = rowData.join(",");
+        doc.text(startX, startY, text);
+        startY += rowHeight;
+
+        // Add a new page if the content exceeds the page height
+        if (startY > 280) {
+          doc.addPage();
+          startY = 10;
+        }
+      }
+
+      // Save the PDF file
+      doc.save("table_data.pdf");
+    }
+  </script>
+</body>
+</html>

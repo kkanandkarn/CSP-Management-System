@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Statement</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(45deg, #49a09d, #5f2c82);
+      font-family: sans-serif;
+      font-weight: 100;
+    }
+
+    .container {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    
+    h1,
+    h3 {
+      color: #fff;
+    }
+
+    table {
+      width: 800px;
+      border-collapse: collapse;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+      padding: 15px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    th {
+      text-align: left;
+    }
+
+    thead th {
+      background-color: #55608f;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    tbody td {
+      position: relative;
+    }
+
+    tbody td:hover:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -9999px;
+      bottom: -9999px;
+      background-color: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+    }
+    .dashboard-icon {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      color: #333;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+  <div class="dashboard-icon" onclick="redirectToDashboard()">
+    <i class="fas fa-arrow-circle-left larger-icon"></i>
+  </div>
+    <h1><b>Mini Statement</b></h1>
+    <h3><b>Account Number:</b> {{ transaction_account_number }}</h3>
+    <h3><b>IFSC Code:</b> {{ transaction_ifsc_code }}</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Transaction Type</th>
+                <th class="text-center">Amount</th>
+                <th class="text-center">Transaction Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr class="table-row">
+                <td>{{ transaction.transaction_type }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.transaction_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        function redirectToDashboard() {
+    window.location.href = '/dashboard';
+  }
+    </script>
+</div>
+</body>
+</html>

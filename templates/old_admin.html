@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Styles for the dashboard */
+        .dashboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #f2f2f2;
+            width: 200px;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .dashboard h2 {
+            margin-top: 0;
+        }
+        
+        .dashboard ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .dashboard li {
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;    
+        }
+        
+        .dashboard li:hover {
+            background-color: #e6e6e6;
+        }
+        
+        .dashboard li i {
+            margin-right: 5px;
+        }
+
+        
+        /* Add boxes with shadows for each module */
+        .dashboard li > div {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        .dashboard .logout-button {
+            margin-top: 470px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .user-icon {
+        margin-right: 10px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-name {
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .user-icon img {
+            width: 40px;
+        }
+        body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      max-height: 80vh; /* Add maximum height */
+      overflow-y: auto; /* Add vertical scroll */
+    }
+    
+    .card-item {
+      flex: 1 0 300px;
+      max-width: 350px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    
+    .card-item:hover {
+      border-color: #ff8c00;
+      transform: scale(1.05);
+    }
+    
+    .card-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    
+    /* Increase size for Image 1 and Image 2 */
+    .container:nth-child(1) .card-item {
+      flex: 1 0 400px;
+    }
+    
+    /* Adjust image size for Image 1 and Image 2 */
+    .container:nth-child(1) .card-item .card-image {
+      max-width: 100%;
+      max-height: 1200%;
+    }
+    
+    h1 {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="user-info">
+            <div class="user-icon">
+                <img src="static/user.png" alt="User Icon">
+            </div>
+            <div class="user-name">
+            Administrator
+            </div>
+        </div>
+        <ul>
+            <li>
+                <div data-module-name="Account Holders" onclick="redirectToAccountHolders()">
+                    <i class="fas fa-users"></i> Account Holders
+                </div>
+            </li>
+            <li>
+                <div data-module-name="Login Credentials" onclick="redirectToCredential()">
+                    <i class="fas fa-key"></i> Login Credentials
+                </div>
+            </li>
+            <li>
+                <div data-module-name="Transaction" onclick="redirectTotransaction()">
+                    <i class="fas fa-exchange-alt"></i> Transaction
+                </div>
+            </li>
+             <!-- Logout button -->
+             <li>
+                <div class="logout-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <h1>CSP Management System Admin Panel</h1>
+
+    <div class="container">
+      <div class="card-item">
+        <img class="card-image" src="static/total_balance.png" alt="Image 1">
+      </div>
+      <div class="card-item">
+        <img class="card-image" src="static/Total Account Holders.png" alt="Image 2">
+      </div>
+    </div>
+  
+    <div class="container">
+      
+      <div class="card-item">
+        <img class="card-image" src="static/Total Account Holders by State (Percentage).png" alt="Image 4">
+      </div>
+      <div class="card-item">
+        <img class="card-image" src="static/Total Balance by Age Group.png" alt="Image 5">
+      </div>
+      
+    </div>
+  
+    <script>
+      const cardItems = document.querySelectorAll('.card-item');
+      cardItems.forEach(card => {
+        card.addEventListener('click', () => {
+          // Remove active class from all cards
+          cardItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          
+          // Add active class to the clicked card
+          card.classList.add('active');
+        });
+      });
+    </script>
+  
+    <script>
+        function redirectToAccountHolders() {
+            window.location.href = '/account_holders';
+        }
+        function redirectToCredential() {
+            window.location.href = '/login-credentials';
+        }
+        function redirectTotransaction() {
+            window.location.href = '/transactions';
+        }
+        function logout() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
