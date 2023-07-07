@@ -18,8 +18,8 @@ transaction_account_number = ""
 transaction_ifsc_code = ""
 account_opening_otp = ""
 
-account_sid = 'ACcfa7ed97949bb58abe841bfea67f1bc6'
-auth_token = '3cff29f4b95cb7155ce10594a6c46be0'
+account_sid = 'twililio account_sid'
+auth_token = 'twilio auth_token'
 
 # Create a Twilio client
 client = Client(account_sid, auth_token)
